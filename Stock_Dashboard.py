@@ -124,16 +124,16 @@ with news:
         st.write(f'News Sentiment {news_sentiment}')
 
 from groq import Groq
-import os
 
-# Use environment variable or Streamlit secrets
-client = Groq(api_key=st.secrets.get("GROQ_API_KEY", ""))
+# Read from Streamlit secrets
+try:
+    api_key = st.secrets["GROQ_API_KEY"]
+    client = Groq(api_key=api_key)
+except:
+    st.error("GROQ_API_KEY not configured in .streamlit/secrets.toml")
+    st.stop()
 
 with openai1:
-    if not st.secrets.get("GROQ_API_KEY"):
-        st.error("GROQ_API_KEY not configured in secrets")
-        st.stop()
-    
     buy_reason, sell_reason, swot_analysis = st.tabs(["3 Reasons to Buy", "3 Reasons to Sell", "SWOT Analysis"])
     
     with buy_reason:
